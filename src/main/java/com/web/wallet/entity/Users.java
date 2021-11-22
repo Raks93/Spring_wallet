@@ -25,4 +25,12 @@ public class Users {
 
     @ManyToMany(mappedBy = "usersList",fetch = FetchType.EAGER)
     private List<Categories> categoriesList;
+
+    public Users() {
+    }
+
+    public Users(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
 }

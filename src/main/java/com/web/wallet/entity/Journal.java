@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Getter
@@ -16,6 +17,8 @@ public class Journal {
 
     private Long amount;
 
+    private Date date;
+
     private Boolean inOutMoney;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -26,4 +29,13 @@ public class Journal {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Cards cards;
+
+    public Journal(Long amount, Date date, Boolean inOutMoney) {
+        this.amount = amount;
+        this.date = date;
+        this.inOutMoney = inOutMoney;
+    }
+
+    public Journal() {
+    }
 }

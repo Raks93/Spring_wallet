@@ -22,4 +22,11 @@ public class Cards {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Users users;
+
+    public Cards(Long balance) {
+        this.balance = balance;
+    }
+
+    public Cards() {
+    }
 }

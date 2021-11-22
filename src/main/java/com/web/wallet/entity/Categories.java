@@ -22,4 +22,11 @@ public class Categories {
 
     @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Journal> journalList;
+
+    public Categories(String name) {
+        this.name = name;
+    }
+
+    public Categories() {
+    }
 }
