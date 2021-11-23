@@ -16,9 +16,9 @@ import java.util.Date;
 public class MainController {
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String start(Model model) {
         model.addAttribute("title", "Главная страница");
-        return "home";
+        return "start";
     }
 
     @PostMapping("/")
