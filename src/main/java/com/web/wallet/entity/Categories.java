@@ -17,7 +17,7 @@ public class Categories {
 
     private String name;
 
-    private boolean income;
+    private Boolean income;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Users>  usersList;
@@ -30,5 +30,14 @@ public class Categories {
     }
 
     public Categories() {
+    }
+
+    @Override
+    public String toString() {
+        return "Categories{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", income=" + income +
+                '}';
     }
 }

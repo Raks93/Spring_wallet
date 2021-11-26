@@ -4,6 +4,8 @@ import com.web.wallet.entity.Users;
 import com.web.wallet.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UsersService {
 
@@ -13,8 +15,16 @@ public class UsersService {
         this.usersRepository = usersRepository;
     }
 
-    public Iterable<Users> findAllUsers() {
+    public List<Users> findAllUsers() {
         return usersRepository.findAll();
+    }
+
+    public Users findUserByName(String username) {
+        return usersRepository.findByUsername(username);
+    }
+
+    public void saveUser(Users user) {
+        usersRepository.save(user);
     }
 
 }

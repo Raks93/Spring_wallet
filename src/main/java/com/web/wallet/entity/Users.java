@@ -21,7 +21,18 @@ public class Users {
 
     private String password;
 
-    private boolean active;
+    private Boolean active;
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", roles=" + roles +
+                '}';
+    }
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -38,12 +49,14 @@ public class Users {
     private List<Categories> categoriesList;
 
 
-    @Override
-    public String toString() {
-        return "Users{" +
-                "id=" + id +
-                ", login='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
+    public Users(String username, String password, boolean active, Set<Role> roles) {
+        this.username = username;
+        this.password = password;
+        this.active = active;
+        this.roles = roles;
+    }
+
+    public Users() {
+
     }
 }
