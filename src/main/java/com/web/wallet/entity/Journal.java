@@ -21,13 +21,13 @@ public class Journal {
 
     private Boolean inOutMoney;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Categories categories;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Cards cards;
 
     public Journal(Long amount, Date date, Boolean inOutMoney) {

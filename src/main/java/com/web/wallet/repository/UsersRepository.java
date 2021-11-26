@@ -4,5 +4,6 @@ import com.web.wallet.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
-    Users findByLoginAndPassword(String login, String password);
+    Users findByUsername(String username);
+
 }

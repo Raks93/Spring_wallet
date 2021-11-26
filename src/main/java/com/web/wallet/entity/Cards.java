@@ -20,7 +20,7 @@ public class Cards {
     @OneToMany(mappedBy = "cards", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Journal> journalList;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
 
     public Cards(Long balance) {

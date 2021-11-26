@@ -17,7 +17,9 @@ public class Categories {
 
     private String name;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private boolean income;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Users>  usersList;
 
     @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, orphanRemoval = true)

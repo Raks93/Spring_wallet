@@ -1,6 +1,5 @@
 package com.web.wallet.controller;
 
-import com.web.wallet.entity.Users;
 import com.web.wallet.service.UsersService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
