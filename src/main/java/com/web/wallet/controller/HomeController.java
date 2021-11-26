@@ -10,17 +10,16 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("title", "Главная страница");
         return "home";
     }
 
 
-    @PostMapping("/home")
-    public String homePost( Model model) {
-//        Date date = java.sql.Date.valueOf(calendar);
-
-        return "home";
-    }
+//    @PostMapping("/home")
+//    public String homePost( Model model) {
+////        Date date = java.sql.Date.valueOf(calendar);
+//
+//        return "home";
+//    }
 
 
 }

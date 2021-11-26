@@ -9,10 +9,10 @@
 <header th:insert="blocks/header :: header"></header>
 
 <main>
-    <h2 class="display-6 text-center mb-4">Average indicators</h2>
+    <h2 class="display-6 text-center mb-4">Средние показатели пользователей</h2>
 
     <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-    <form th:action="@{/logout}" method="post">
+    <form th:action="@{/logout}" method="post" href="/">
         <input type="submit" value="Sign Out"/>
     </form>
 
@@ -77,6 +77,5 @@
         </table>
     </div>
 </main>
-<div th:insert="blocks/footer :: footer"></div>
 </body>
 </html>

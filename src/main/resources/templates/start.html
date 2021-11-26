@@ -13,6 +13,11 @@
 
     <p>Click <a href="/home">here</a> to see a greeting.</p>
 
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+
+    <p th:text="${message}" ></p>
+
+
     <!--
     <form action="/" method="post">
     <p>Выберите дату: <input type="date" name="calendar" max="2100-01-01" min="2000-01-01">
@@ -74,6 +79,5 @@
         </table>
     </div>
 </main>
-<div th:insert="blocks/footer :: footer"></div>
 </body>
 </html>
