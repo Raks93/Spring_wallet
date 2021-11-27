@@ -36,7 +36,6 @@ public class CardsService {
                 cardsList.add(card);
                 card.setUsers(user.get());
                 cardsRepository.save(card);
-                System.out.println(card);
             }
             else {
                 List<Cards> existCards = user.get().getCardsList();
@@ -44,7 +43,6 @@ public class CardsService {
                 for (Cards existCard : existCards) {
                     if (existCard.getName().equals(standardCardsName)) {
                         checkExist = false;
-                        System.out.println("Карта " + standardCardsName + " существует");
                         break;
                     }
                 }
@@ -54,7 +52,6 @@ public class CardsService {
                     cardsList.add(card);
                     card.setUsers(user.get());
                     cardsRepository.save(card);
-                    System.out.println(card);
                 }
             }
         }

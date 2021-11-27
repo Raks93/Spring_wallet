@@ -1,5 +1,6 @@
 package com.web.wallet.controller;
 
+import com.web.wallet.entity.Categories;
 import com.web.wallet.entity.Role;
 import com.web.wallet.entity.Users;
 import com.web.wallet.repository.CardsRepository;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @Controller
@@ -44,10 +46,19 @@ public class RegistrationController {
             return "registration";
         }
 
+        List<Categories> standardCategoriesInDb = categoriesRepository.findStandardCategoriesInDb();
+
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         usersRepository.save(user);
-        user.setCategoriesList(categoriesRepository.findStandardCategoriesInDb());
+
+        for (Categories categories : standardCategoriesInDb) {
+            List<Users> usersList = categories.getUsersList();
+            usersList.add(user);
+            categories.setUsersList(usersList);
+        }
+
+        user.setCategoriesList(standardCategoriesInDb);
         user.setCardsList(cardsService.generatedStandardCards(user.getId()));
 
         return "redirect:/login";

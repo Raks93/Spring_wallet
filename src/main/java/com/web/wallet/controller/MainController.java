@@ -2,6 +2,7 @@ package com.web.wallet.controller;
 
 import com.web.wallet.entity.Cards;
 import com.web.wallet.entity.Categories;
+import com.web.wallet.entity.Journal;
 import com.web.wallet.entity.Users;
 import com.web.wallet.service.CardsService;
 import com.web.wallet.service.CategoriesService;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class MainController {
@@ -55,13 +58,33 @@ public class MainController {
 
         for (Categories standardCategory : standardCategories) {
             standardCategory.setUsersList(users);
-            System.out.println(standardCategory);
         }
 
         for (Users user : users) {
             user.setCategoriesList(standardCategories);
             user.setCardsList(cardsService.generatedStandardCards(user.getId()));
-            System.out.println(user);
+        }
+
+//        (int) (Math.random() * ++max) + min;
+
+        LocalDate date = LocalDate.now();
+        System.out.println(date);
+
+
+        for (Users user : users) {
+            List<Cards> cardsList = user.getCardsList();
+            for (Cards card : cardsList) {
+                List<Categories> categoriesList = user.getCategoriesList();
+                for (Categories category : categoriesList) {
+                    Journal journal = new Journal();
+                    journal.setAmount((long) ((Math.random() * 11) + 1)* 100);
+
+                }
+            }
+
+
+
+
         }
     }
 }
