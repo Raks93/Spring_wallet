@@ -19,6 +19,8 @@ public class Journal {
 
     private Date date;
 
+    private String purchase;
+
     private Boolean inOutMoney;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -30,12 +32,23 @@ public class Journal {
     @ManyToOne(fetch = FetchType.LAZY)
     private Cards cards;
 
-    public Journal(Long amount, Date date, Boolean inOutMoney) {
+    public Journal(Long amount, Date date, String purchase, Boolean inOutMoney) {
         this.amount = amount;
         this.date = date;
+        this.purchase = purchase;
         this.inOutMoney = inOutMoney;
     }
 
     public Journal() {
+    }
+
+    @Override
+    public String toString() {
+        return "Journal{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", date=" + date +
+                ", inOutMoney=" + inOutMoney +
+                '}';
     }
 }

@@ -74,4 +74,8 @@ public class CardsService {
         return cardsRepository.findAll();
     }
 
+    public void saveCard(Cards cards) {
+        cardsRepository.save(cards);
+    }
+
 }

@@ -6,15 +6,16 @@ import com.web.wallet.entity.Journal;
 import com.web.wallet.entity.Users;
 import com.web.wallet.service.CardsService;
 import com.web.wallet.service.CategoriesService;
+import com.web.wallet.service.JournalService;
 import com.web.wallet.service.UsersService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 public class MainController {
@@ -25,10 +26,13 @@ public class MainController {
 
     private final UsersService usersService;
 
-    public MainController(CategoriesService categoriesService, CardsService cardsService, UsersService usersService) {
+    private final JournalService journalService;
+
+    public MainController(CategoriesService categoriesService, CardsService cardsService, UsersService usersService, JournalService  journalService) {
         this.categoriesService = categoriesService;
         this.cardsService = cardsService;
         this.usersService = usersService;
+        this.journalService = journalService;
     }
 
     @GetMapping("/")
@@ -65,11 +69,8 @@ public class MainController {
             user.setCardsList(cardsService.generatedStandardCards(user.getId()));
         }
 
-//        (int) (Math.random() * ++max) + min;
 
         LocalDate date = LocalDate.now();
-        System.out.println(date);
-
 
         for (Users user : users) {
             List<Cards> cardsList = user.getCardsList();
@@ -78,7 +79,16 @@ public class MainController {
                 for (Categories category : categoriesList) {
                     Journal journal = new Journal();
                     journal.setAmount((long) ((Math.random() * 11) + 1)* 100);
-
+                    journal.setDate(Date.valueOf(date.minusDays((long) ((Math.random() * 11) + 1) * 35)));
+                    journal.setInOutMoney(category.getIncome());
+                    journal.setPurchase("Что-то");
+                    journalService.saveJournal(journal);
+                    journal.setUsers(user);
+                    journal.setCards(card);
+                    journal.setCategories(category);
+                    Long balance = category.getIncome() ? card.getBalance() + journal.getAmount() :  card.getBalance() - journal.getAmount();
+                    card.setBalance(balance);
+                    cardsService.saveCard(card);
                 }
             }
 
