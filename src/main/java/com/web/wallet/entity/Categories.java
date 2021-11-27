@@ -22,11 +22,12 @@ public class Categories {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Users>  usersList;
 
-    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Journal> journalList;
 
-    public Categories(String name) {
+    public Categories(String name, Boolean income) {
         this.name = name;
+        this.income = income;
     }
 
     public Categories() {
@@ -38,6 +39,7 @@ public class Categories {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", income=" + income +
+                ", usersList=" + usersList +
                 '}';
     }
 }

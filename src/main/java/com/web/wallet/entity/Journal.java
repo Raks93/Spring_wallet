@@ -19,8 +19,6 @@ public class Journal {
 
     private Date date;
 
-    private Boolean inOutMoney;
-
     @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
 
@@ -33,7 +31,6 @@ public class Journal {
     public Journal(Long amount, Date date, Boolean inOutMoney) {
         this.amount = amount;
         this.date = date;
-        this.inOutMoney = inOutMoney;
     }
 
     public Journal() {

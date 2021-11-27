@@ -1,11 +1,15 @@
 <div th:fragment="header">
+    <form th:action="@{/logout}" method="post" href="/">
+        <input type="submit" value="Sign Out"/>
+    </form>
     <div class="d-flex flex-column flex-md-row align-items-center pb-3 mb-4 border-bottom">
             <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/">Главная</a>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="/journal">Журнал/a>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/journal">Журнал</a>
                 <a class="me-3 py-2 text-dark text-decoration-none" href="/cards">Счета</a>
-                <a class="me-3 py-2 text-dark text-decoration-none" href="'/categories">Категории товаров</a>
+                <a class="me-3 py-2 text-dark text-decoration-none" href="/categories">Категории товаров</a>
             </nav>
+
     </div>
 </div>
 

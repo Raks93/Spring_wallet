@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Счета</title>
+    <style>
+      table th, table td {padding: 5px;}
+      .row  {
+         font-style: italic;
+      }
+      .even-row {
+         color: black;
+      }
+      .odd-row {
+         color: black;
+      }
+    </style>
+</head>
+<body>
+<header align="right"   th:insert="blocks/header :: header"></header>
+<h1 align="center">Счета</h1>
+    <table border="1" class="table" align="center">
+        <tr>
+            <th>Номер</th>
+            <th>Название</th>
+            <th>Баланс</th>
+        </tr>
+        <tr th:each="el, state : ${cards}"
+            class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
+            <td th:utext="${state.index}">Номер</td>
+            <td th:utext="${el.name}">Название</td>
+            <td th:utext="${el.balance}">Баланс</td>
+        </tr>
+    </table>
+</body>
+</html>

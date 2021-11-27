@@ -1,5 +1,9 @@
 package com.web.wallet.controller;
 
+import com.web.wallet.entity.Cards;
+import com.web.wallet.entity.Categories;
+import com.web.wallet.entity.Users;
+import com.web.wallet.service.CardsService;
 import com.web.wallet.service.CategoriesService;
 import com.web.wallet.service.UsersService;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,41 +11,31 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 @Controller
 public class MainController {
 
     private final CategoriesService categoriesService;
 
-    public MainController(CategoriesService categoriesService) {
+    private final CardsService cardsService;
+
+    private final UsersService usersService;
+
+    public MainController(CategoriesService categoriesService, CardsService cardsService, UsersService usersService) {
         this.categoriesService = categoriesService;
+        this.cardsService = cardsService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/")
     public String start(Model model) {
-        categoriesService.checkStandardCategoriesInDb();
+        generateValuesDb();
 
         if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser"))
             return "start";
 
-
-//        List<Categories> standardCategories = categoriesService.findStandardCategories();
-//
-//        List<Users> users = usersService.findAllUsers();
-//
-//        for (Categories standardCategory : standardCategories) {
-//            standardCategory.setUsersList(users);
-//            categoriesService.saveCategory(standardCategory);
-//            System.out.println(standardCategory);
-//        }
-
-//        Iterable<Users> users = usersService.findAllUsers();
-//        for (Users user : users) {
-//            user.setCategoriesList(standardCategories);
-//            usersService.saveUser(user);
-//            System.out.println(user);
-//        }
-//        System.out.println("redirect:/home/" + usersService.findUserByName(username).getId());
-        return "redirect:/home/";
+        return "redirect:/home";
     }
 
 //    @PostMapping("/")
@@ -51,4 +45,23 @@ public class MainController {
 //        return "start";
 //    }
 
+    private void generateValuesDb() {
+        categoriesService.checkStandardCategoriesInDb();
+        usersService.generateFewUsers();
+
+        List<Categories> standardCategories = categoriesService.findStandardCategories();
+
+        List<Users> users = usersService.findAllUsers();
+
+        for (Categories standardCategory : standardCategories) {
+            standardCategory.setUsersList(users);
+            System.out.println(standardCategory);
+        }
+
+        for (Users user : users) {
+            user.setCategoriesList(standardCategories);
+            user.setCardsList(cardsService.generatedStandardCards(user.getId()));
+            System.out.println(user);
+        }
+    }
 }

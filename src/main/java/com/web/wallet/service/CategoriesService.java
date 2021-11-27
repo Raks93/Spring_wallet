@@ -17,12 +17,17 @@ public class CategoriesService {
 
     public void checkStandardCategoriesInDb() {
         String[] standardCategoriesNames = {"Еда", "Здоровье", "Одежда", "Развлечения"};
-        for (String standardCategoriesName : standardCategoriesNames) {
-            if (categoriesRepository.findByName(standardCategoriesName) == null)
+        AddArrayCategories(standardCategoriesNames, false);
+
+        String[] standardIncomeCategoriesNames = {"Зарплата", "Аванс"};
+        AddArrayCategories(standardIncomeCategoriesNames, true);
+    }
+
+    public void AddArrayCategories(String[] arrayNames, boolean income) {
+        for (String name : arrayNames) {
+            if (categoriesRepository.findByName(name) == null)
             {
-                Categories categories = new Categories();
-                categories.setName(standardCategoriesName);
-                categoriesRepository.save(categories);
+                categoriesRepository.save(new Categories(name, income));
             }
         }
     }

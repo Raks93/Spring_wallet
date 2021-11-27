@@ -39,14 +39,15 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Cards> cardsList;
 
-    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Journal> journalList;
 
     @ManyToMany(mappedBy = "usersList",fetch = FetchType.EAGER)
     private List<Categories> categoriesList;
+
 
 
     public Users(String username, String password, boolean active, Set<Role> roles) {

@@ -1,9 +1,11 @@
 package com.web.wallet.service;
 
+import com.web.wallet.entity.Role;
 import com.web.wallet.entity.Users;
 import com.web.wallet.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -25,6 +27,17 @@ public class UsersService {
 
     public void saveUser(Users user) {
         usersRepository.save(user);
+    }
+
+    public void generateFewUsers() {
+        System.out.println("Пользоватали отсутствуют: " + usersRepository.findAll().isEmpty());
+        if (usersRepository.findAll().isEmpty()) {
+            for (int i = 1; i < 10; i++) {
+                Users user = new Users(String.valueOf(i), String.valueOf(i), true, Collections.singleton(Role.USER));
+                usersRepository.save(user);
+                System.out.println(user);
+            }
+        }
     }
 
 }

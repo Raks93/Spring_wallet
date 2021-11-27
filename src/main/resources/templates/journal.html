@@ -7,6 +7,20 @@
 <body>
 <header th:insert="blocks/header :: header"></header>
 
+<table border="1">
+    <tr>
+        <th>No</th>
+        <th>Full Name</th>
+        <th>Email</th>
+    </tr>
+    <tr th:each="el, state : ${journal}"
+        class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
+        <td th:utext="${state.index}">No</td>
+        <td th:utext="${el.fullName}">Full Name</td>
+        <td th:utext="${el.email}">Email</td>
+    </tr>
+</table>
+
 
 </body>
 </html>
