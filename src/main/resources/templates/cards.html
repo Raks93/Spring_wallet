@@ -21,15 +21,21 @@
 <h1 align="center">Счета</h1>
     <table border="1" class="table" align="center">
         <tr>
-            <th>Номер</th>
             <th>Название</th>
             <th>Баланс</th>
+            <th>Редактировать</th>
+            <th>Удалить</th>
         </tr>
         <tr th:each="el, state : ${cards}"
             class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
-            <td th:utext="${state.index}">Номер</td>
             <td th:utext="${el.name}">Название</td>
             <td th:utext="${el.balance}">Баланс</td>
+            <td>
+                <a th:href="'/journal/edit/' + ${el.id}">Редактировать</a>
+            </td>
+            <td>
+                <a th:href="'/journal/delete/' + ${el.id}">Удалить</a>
+            </td>
         </tr>
     </table>
 </body>

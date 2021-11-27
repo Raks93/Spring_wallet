@@ -21,13 +21,13 @@
 <h1 align="center">Статьи бюджета</h1>
 <table border="1" class="table" align="center">
     <tr>
-        <th>Номер</th>
         <th>Название</th>
         <th>Категория</th>
+        <th>Редактировать</th>
+        <th>Удалить</th>
     </tr>
     <tr th:each="el, state : ${categories}"
         class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
-        <td th:utext="${state.index}">Номер</td>
         <td th:utext="${el.name}">Название</td>
         <div th:if="${el.income}">
             <td th:utext="Доход">Категория</td>
@@ -35,6 +35,12 @@
         <div th:unless="${el.income}">
             <td th:utext="Расход">Категория</td>
         </div>
+        <td>
+            <a th:href="'/journal/edit/' + ${el.id}">Редактировать</a>
+        </td>
+        <td>
+            <a th:href="'/journal/delete/' + ${el.id}">Удалить</a>
+        </td>
     </tr>
 </table>
 

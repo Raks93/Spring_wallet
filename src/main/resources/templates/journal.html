@@ -21,14 +21,15 @@
 <h1 align="center">Журнал</h1>
 <table border="1" class="table" align="center">
     <tr>
-        <th>Номер</th>
         <th>Сумма</th>
         <th>Название</th>
         <th>Дата</th>
+        <th>Редактировать</th>
+        <th>Удалить</th>
     </tr>
     <tr th:each="el, state : ${journal}"
         class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
-        <td th:utext="${state.index}">Номер</td>
+
         <div th:if="${el.inOutMoney}">
             <td th:utext="'+' + ${el.amount}">Сумма</td>
         </div>
@@ -37,6 +38,12 @@
         </div>
         <td th:utext="${el.purchase}">Название</td>
         <td th:utext="${el.date}">Дата</td>
+        <td>
+            <a th:href="'/journal/edit/' + ${el.id}">Редактировать</a>
+        </td>
+        <td>
+            <a th:href="'/journal/delete/' + ${el.id}">Удалить</a>
+        </td>
     </tr>
 </table>
 </body>
