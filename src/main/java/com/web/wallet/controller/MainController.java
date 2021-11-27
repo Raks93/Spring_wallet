@@ -79,7 +79,7 @@ public class MainController {
                 for (Categories category : categoriesList) {
                     Journal journal = new Journal();
                     journal.setAmount((long) ((Math.random() * 11) + 1)* 100);
-                    journal.setDate(Date.valueOf(date.minusDays((long) ((Math.random() * 11) + 1) * 35)));
+                    journal.setDate(date.minusDays((long) ((Math.random() * 11) + 1) * 35));
                     journal.setInOutMoney(category.getIncome());
                     journal.setPurchase("Что-то");
                     journalService.saveJournal(journal);

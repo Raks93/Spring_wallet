@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 @Controller
 public class JournalController {
 
@@ -21,6 +24,7 @@ public class JournalController {
         Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
 
         System.out.println(user.getJournalList());
+        user.getJournalList().sort(Collections.reverseOrder(Comparator.comparing(j -> j.getDate().toString())));
 
         model.addAttribute("journal", user.getJournalList());
 

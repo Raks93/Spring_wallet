@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -17,7 +18,7 @@ public class Journal {
 
     private Long amount;
 
-    private Date date;
+    private LocalDate date;
 
     private String purchase;
 
@@ -32,7 +33,7 @@ public class Journal {
     @ManyToOne(fetch = FetchType.LAZY)
     private Cards cards;
 
-    public Journal(Long amount, Date date, String purchase, Boolean inOutMoney) {
+    public Journal(Long amount, LocalDate date, String purchase, Boolean inOutMoney) {
         this.amount = amount;
         this.date = date;
         this.purchase = purchase;
