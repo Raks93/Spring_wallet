@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UsersService {
@@ -36,6 +37,16 @@ public class UsersService {
                 usersRepository.save(user);
             }
         }
+    }
+
+    public boolean existUser(long id) {
+        return usersRepository.existsById(id);
+    }
+
+    public Users findUserById(long id) {
+        Optional<Users> byId = usersRepository.findById(id);
+        if (!byId.isPresent()) return null;
+        return byId.get();
     }
 
 }

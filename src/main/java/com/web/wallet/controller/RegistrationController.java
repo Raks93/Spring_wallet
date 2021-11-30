@@ -45,17 +45,15 @@ public class RegistrationController {
             model.addAttribute("message", "User exists!");
             return "registration";
         }
-
-        List<Categories> standardCategoriesInDb = categoriesRepository.findStandardCategoriesInDb();
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        List<Categories> standardCategoriesInDb = categoriesRepository.findCategoriesOrderByIdDescInDB();
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         usersRepository.save(user);
 
         for (Categories categories : standardCategoriesInDb) {
-            List<Users> usersList = categories.getUsersList();
-            usersList.add(user);
-            categories.setUsersList(usersList);
+            categories.setUsers(user);
         }
 
         user.setCategoriesList(standardCategoriesInDb);

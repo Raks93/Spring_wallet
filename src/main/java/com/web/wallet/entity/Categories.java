@@ -19,8 +19,8 @@ public class Categories {
 
     private Boolean income;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Users>  usersList;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Users  users;
 
     @OneToMany(mappedBy = "categories", cascade = CascadeType.ALL)
     private List<Journal> journalList;
@@ -39,7 +39,7 @@ public class Categories {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", income=" + income +
-                ", usersList=" + usersList +
+                ", usersList=" + users +
                 '}';
     }
 }

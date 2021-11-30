@@ -45,7 +45,7 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     private List<Journal> journalList;
 
-    @ManyToMany(mappedBy = "usersList",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "users",cascade = CascadeType.ALL)
     private List<Categories> categoriesList;
 
 

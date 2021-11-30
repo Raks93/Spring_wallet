@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -53,48 +52,46 @@ public class MainController {
 //    }
 
     private void generateValuesDb() {
-        categoriesService.checkStandardCategoriesInDb();
         usersService.generateFewUsers();
-
-        List<Categories> standardCategories = categoriesService.findStandardCategories();
 
         List<Users> users = usersService.findAllUsers();
 
-        for (Categories standardCategory : standardCategories) {
-            standardCategory.setUsersList(users);
-        }
-
-        for (Users user : users) {
-            user.setCategoriesList(standardCategories);
-            user.setCardsList(cardsService.generatedStandardCards(user.getId()));
-        }
-
-
         LocalDate date = LocalDate.now();
 
-        for (Users user : users) {
-            List<Cards> cardsList = user.getCardsList();
-            for (Cards card : cardsList) {
-                List<Categories> categoriesList = user.getCategoriesList();
-                for (Categories category : categoriesList) {
-                    Journal journal = new Journal();
-                    journal.setAmount((long) ((Math.random() * 11) + 1)* 100);
-                    journal.setDate(date.minusDays((long) ((Math.random() * 11) + 1) * 35));
-                    journal.setInOutMoney(category.getIncome());
-                    journal.setPurchase("Что-то");
-                    journalService.saveJournal(journal);
-                    journal.setUsers(user);
-                    journal.setCards(card);
-                    journal.setCategories(category);
-                    Long balance = category.getIncome() ? card.getBalance() + journal.getAmount() :  card.getBalance() - journal.getAmount();
-                    card.setBalance(balance);
-                    cardsService.saveCard(card);
+        if (users.get(0).getJournalList().isEmpty() || users.get(0).getJournalList().size() == 0) {
+
+            for (Users user : users) {
+                categoriesService.createStandardCategoriesInDb();
+                List<Categories> standardCategories = categoriesService.findLastSixCategories();
+                for (Categories standardCategory : standardCategories) {
+                    standardCategory.setUsers(user);
                 }
+                user.setCategoriesList(standardCategories);
+                user.setCardsList(cardsService.generatedStandardCards(user.getId()));
             }
 
 
+            for (Users user : users) {
+                List<Cards> cardsList = user.getCardsList();
+                for (Cards card : cardsList) {
+                    List<Categories> categoriesList = user.getCategoriesList();
+                    for (Categories category : categoriesList) {
+                        Journal journal = new Journal();
+                        journal.setAmount((long) ((Math.random() * 11) + 1) * 100);
+                        journal.setDate(date.minusDays((long) ((Math.random() * 11) + 1) * 35));
+                        journal.setInOutMoney(category.getIncome());
+                        journal.setPurchase("Что-то");
+                        journalService.saveJournal(journal);
+                        journal.setUsers(user);
+                        journal.setCards(card);
+                        journal.setCategories(category);
 
-
+                        Long balance = card.getBalance() + (category.getIncome() ? journal.getAmount() : -journal.getAmount());
+                        card.setBalance(balance);
+                        cardsService.saveCard(card);
+                    }
+                }
+            }
         }
     }
 }

@@ -19,11 +19,13 @@
 <body>
 <header align="right"   th:insert="blocks/header :: header"></header>
 <h1 align="center">Счета</h1>
+<h4 align="center" th:text="${message}" ></h4>
     <table border="1" class="table" align="center">
         <tr>
             <th>Название</th>
             <th>Баланс</th>
             <th>Редактировать</th>
+            <th>Перенести</th>
             <th>Удалить</th>
         </tr>
         <tr th:each="el, state : ${cards}"
@@ -31,10 +33,13 @@
             <td th:utext="${el.name}">Название</td>
             <td th:utext="${el.balance}">Баланс</td>
             <td>
-                <a th:href="'/journal/edit/' + ${el.id}">Редактировать</a>
+                <a th:href="'/cards/edit/' + ${el.id}">Редактировать</a>
             </td>
             <td>
-                <a th:href="'/journal/delete/' + ${el.id}">Удалить</a>
+                <a th:href="'/cards/replace/' + ${el.id} + '/' + ${state.size}">Перенести</a>
+            </td>
+            <td>
+                <a th:href="'/cards/delete/' + ${el.id} + '/' + ${state.size}">Удалить</a>
             </td>
         </tr>
     </table>

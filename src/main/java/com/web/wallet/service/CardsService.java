@@ -1,6 +1,7 @@
 package com.web.wallet.service;
 
 import com.web.wallet.entity.Cards;
+import com.web.wallet.entity.Journal;
 import com.web.wallet.entity.Users;
 import com.web.wallet.repository.CardsRepository;
 import com.web.wallet.repository.UsersRepository;
@@ -78,4 +79,34 @@ public class CardsService {
         cardsRepository.save(cards);
     }
 
+    public Optional<Cards> findCardById(long id) {
+        return cardsRepository.findById(id);
+    }
+
+    public Journal editCard(Journal oldJournal, Journal newJournal) {
+        long oldJournalAmount = oldJournal.getInOutMoney() ? -oldJournal.getAmount() : oldJournal.getAmount();
+        long newJournalAmount = newJournal.getInOutMoney() ? newJournal.getAmount() : -newJournal.getAmount();
+
+        if (oldJournal.getCards().equals(newJournal.getCards())) {
+            newJournal.getCards().setBalance(newJournal.getCards().getBalance() + oldJournalAmount + newJournalAmount);
+        }
+        else {
+            oldJournal.getCards().setBalance(oldJournal.getCards().getBalance() + oldJournalAmount);
+            newJournal.getCards().setBalance(newJournal.getCards().getBalance() + newJournalAmount);
+            cardsRepository.save(oldJournal.getCards());
+        }
+        cardsRepository.save(newJournal.getCards());
+
+        return newJournal;
+    }
+
+    public void rollBackBalance(Journal journal) {
+        long amount = journal.getInOutMoney() ? -journal.getAmount() : journal.getAmount();
+        journal.getCards().setBalance(journal.getCards().getBalance() + amount);
+        cardsRepository.save(journal.getCards());
+    }
+
+    public void deleteCardById(long id) {
+        cardsRepository.deleteById(id);
+    }
 }

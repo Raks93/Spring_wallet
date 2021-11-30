@@ -10,6 +10,9 @@ public interface CategoriesRepository extends JpaRepository<Categories, Long> {
 
     Categories findByName(String name);
 
-    @Query("SELECT c From Categories c WHERE c.id < 7")
-    List<Categories> findStandardCategoriesInDb();
+    @Query("SELECT c FROM Categories c ORDER BY c.id DESC")
+    List<Categories> findCategoriesOrderByIdDescInDB();
+
+    @Query("SELECT c.income FROM Categories c WHERE c.id = ?1")
+    Boolean findIncomeById(Long id);
 }
