@@ -41,15 +41,8 @@ public class MainController {
         if (SecurityContextHolder.getContext().getAuthentication().getName().equals("anonymousUser"))
             return "start";
 
-        return "redirect:/home";
+        return "home";
     }
-
-//    @PostMapping("/")
-//    public String startPost(@RequestParam String calendar, Model model) {
-//        Date date = java.sql.Date.valueOf(calendar);
-//
-//        return "start";
-//    }
 
     private void generateValuesDb() {
         usersService.generateFewUsers();
@@ -58,7 +51,7 @@ public class MainController {
 
         LocalDate date = LocalDate.now();
 
-        if (users.get(0).getJournalList().isEmpty() || users.get(0).getJournalList().size() == 0) {
+        if (users.get(0).getJournalList() == null || users.get(0).getJournalList().isEmpty() || users.get(0).getJournalList().size() == 0) {
 
             for (Users user : users) {
                 categoriesService.createStandardCategoriesInDb();

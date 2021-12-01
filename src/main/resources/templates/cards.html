@@ -20,6 +20,12 @@
 <header align="right"   th:insert="blocks/header :: header"></header>
 <h1 align="center">Счета</h1>
 <h4 align="center" th:text="${message}" ></h4>
+<div class="container mt-5 mb-5">
+    <form align="center" action="/cards/add">
+        <button type="submit"  class="btn btn-success">Добавить счёт</button>
+    </form>
+</div>
+
     <table border="1" class="table" align="center">
         <tr>
             <th>Название</th>

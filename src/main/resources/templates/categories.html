@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Счета</title>
+    <title>Статьи бюджета</title>
     <style>
       table th, table td {padding: 5px;}
       .row  {
@@ -19,6 +19,12 @@
 <body>
 <header align="right"   th:insert="blocks/header :: header"></header>
 <h1 align="center">Статьи бюджета</h1>
+<h4 align="center" th:text="${message}"></h4>
+<div class="container mt-5 mb-5">
+    <form align="center" action="/categories/add">
+        <button type="submit"  class="btn btn-success">Добавить категорию</button>
+    </form>
+</div>
 <table border="1" class="table" align="center">
     <tr>
         <th>Название</th>
@@ -36,10 +42,10 @@
             <td th:utext="Расход">Категория</td>
         </div>
         <td>
-            <a th:href="'/journal/edit/' + ${el.id}">Редактировать</a>
+            <a th:href="'/categories/edit/' + ${el.id}">Редактировать</a>
         </td>
         <td>
-            <a th:href="'/journal/delete/' + ${el.id}">Удалить</a>
+            <a th:href="'/categories/delete/' + ${el.id} + '/' + ${state.size}">Удалить</a>
         </td>
     </tr>
 </table>

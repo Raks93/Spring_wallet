@@ -4,6 +4,7 @@ import com.web.wallet.entity.Cards;
 import com.web.wallet.entity.Journal;
 import com.web.wallet.entity.Users;
 import com.web.wallet.service.CardsService;
+import com.web.wallet.service.JournalService;
 import com.web.wallet.service.UsersService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +25,12 @@ public class CardsController {
 
     private final UsersService usersService;
 
-    public CardsController(CardsService cardsService, UsersService usersService) {
+    private final JournalService journalService;
+
+    public CardsController(CardsService cardsService, UsersService usersService, JournalService journalService) {
         this.cardsService = cardsService;
         this.usersService = usersService;
+        this.journalService = journalService;
     }
 
     @GetMapping("/cards")
@@ -40,8 +43,40 @@ public class CardsController {
         return "cards";
     }
 
+    @GetMapping("/cards/add")
+    public String addCard(Model model) {
+
+        Cards card = new Cards("", 0L);
+
+        model.addAttribute("cards", card);
+        return "cards_add";
+    }
+
+    @PostMapping("/cards/add")
+    public String postAddCard(@RequestParam Long balance, @RequestParam String name, Model model) {
+        Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<Cards> cardsList = user.getCardsList();
+        Cards card = new Cards(name, balance);
+
+        for (Cards cards : cardsList) {
+            if (cards.getName().equals(name)) {
+                model.addAttribute("cards", card);
+                model.addAttribute("message", "Такой счёт существует!");
+                return "cards_add";
+            }
+        }
+
+        card.setUsers(user);
+        cardsService.saveCard(card);
+
+        cardsList.add(card);
+        user.setCardsList(cardsList);
+
+        return "redirect:/cards";
+    }
+
     @GetMapping("/cards/edit/{id}")
-    public String editCard(@PathVariable(value = "id") long id, Model model) {
+    public String editCard(@PathVariable(value = "id") Long id, Model model) {
         Optional<Cards> optionalCards = cardsService.findCardById(id);
 
         if (!optionalCards.isPresent()) {
@@ -54,7 +89,7 @@ public class CardsController {
     }
 
     @PostMapping("/cards/edit/{id}")
-    public String updateCard(@PathVariable(value = "id") long id, @RequestParam long balance, @RequestParam String name, Model model) {
+    public String updateCard(@PathVariable(value = "id") Long id, @RequestParam Long balance, @RequestParam String name, Model model) {
         Optional<Cards> optionalCards = cardsService.findCardById(id);
 
         if (!optionalCards.isPresent()) {
@@ -69,7 +104,7 @@ public class CardsController {
     }
 
     @GetMapping("/cards/delete/{id}/{size}")
-    public String deleteCard(@PathVariable(value = "id") long id, @PathVariable(value = "size") long size, Model model) {
+    public String deleteCard(@PathVariable(value = "id") Long id, @PathVariable(value = "size") Long size, Model model) {
 
         if (size == 1) {
             model.addAttribute("message", "Нельзя удалить последний счет");
@@ -84,7 +119,7 @@ public class CardsController {
     }
 
     @GetMapping("/cards/replace/{id}/{size}")
-    public String replaceCard(@PathVariable(value = "id") long id, @PathVariable(value = "size") long size, Model model) {
+    public String replaceCard(@PathVariable(value = "id") Long id, @PathVariable(value = "size") Long size, Model model) {
         if (size == 1) {
             model.addAttribute("message", "Нельзя перенести, если счёт один");
             model.addAttribute("cards", cardsService.findCardById(id).orElse(new Cards()));
@@ -99,6 +134,33 @@ public class CardsController {
         model.addAttribute("cards", user.getCardsList());
 
         return "cards_replace";
+    }
+
+    @PostMapping("/cards/replace/{id}/{size}")
+    public String postReplaceCard(@PathVariable(value = "id") Long id, @PathVariable(value = "size") Long size, @RequestParam Long chooseCard, Model model) {
+
+        Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        Optional<Cards> cardById = cardsService.findCardById(chooseCard);
+
+        if (!cardById.isPresent()) {
+            return "redirect:/cards";
+        }
+
+        List<Journal> journalList = user.getJournalList();
+        for (Journal journal : journalList) {
+            if (journal.getCards().getId().equals(id)) {
+                Journal newJournal = new Journal(journal.getAmount(), journal.getDate(), journal.getPurchase(), journal.getInOutMoney());
+                newJournal.setId(journal.getId());
+                newJournal.setCategories(journal.getCategories());
+                newJournal.setUsers(journal.getUsers());
+                newJournal.setCards(cardById.get());
+                newJournal = cardsService.editCard(journal, newJournal);
+                journalService.saveJournal(newJournal);
+            }
+        }
+
+        return "redirect:/cards";
     }
 
 }

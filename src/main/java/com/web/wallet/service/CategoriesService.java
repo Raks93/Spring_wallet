@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriesService {
@@ -47,7 +48,11 @@ public class CategoriesService {
         return categoriesRepository.findIncomeById(id);
     }
 
-    public Categories findCategoryById(long id) {
-        return categoriesRepository.findById(id).orElse(new Categories());
+    public Optional<Categories> findCategoryById(long id) {
+        return categoriesRepository.findById(id);
+    }
+
+    public void deleteCategoryById(long id) {
+        categoriesRepository.deleteById(id);
     }
 }

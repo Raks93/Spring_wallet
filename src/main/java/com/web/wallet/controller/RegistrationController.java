@@ -3,10 +3,11 @@ package com.web.wallet.controller;
 import com.web.wallet.entity.Categories;
 import com.web.wallet.entity.Role;
 import com.web.wallet.entity.Users;
-import com.web.wallet.repository.CardsRepository;
 import com.web.wallet.repository.CategoriesRepository;
 import com.web.wallet.repository.UsersRepository;
 import com.web.wallet.service.CardsService;
+import com.web.wallet.service.CategoriesService;
+import com.web.wallet.service.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,16 +21,16 @@ import java.util.List;
 @Controller
 public class RegistrationController {
 
-    private final UsersRepository usersRepository;
-
-    private final CategoriesRepository categoriesRepository;
-
     private final CardsService cardsService;
 
-    public RegistrationController(UsersRepository usersRepository, CategoriesRepository categoriesRepository, CardsService cardsService) {
-        this.usersRepository = usersRepository;
-        this.categoriesRepository = categoriesRepository;
+    private final CategoriesService categoriesService;
+
+    private final UsersService usersService;
+
+    public RegistrationController(CardsService cardsService, CategoriesService categoriesService, UsersService usersService) {
         this.cardsService = cardsService;
+        this.categoriesService = categoriesService;
+        this.usersService = usersService;
     }
 
     @GetMapping("/registration")
@@ -39,25 +40,32 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(Users user, Model model) {
-        Users userFromDb = usersRepository.findByUsername(user.getUsername());
-
-        if (userFromDb != null) {
-            model.addAttribute("message", "User exists!");
+        if (user.getUsername().equals("anonymousUser")) {
+            model.addAttribute("message", "Запрещенное имя пользователя!");
             return "registration";
         }
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        List<Categories> standardCategoriesInDb = categoriesRepository.findCategoriesOrderByIdDescInDB();
+
+        System.out.println(user);
+        Users userFromDb = usersService.findUserByName(user.getUsername());
+
+        if (userFromDb != null) {
+            model.addAttribute("message", "Пользователь существует!");
+            return "registration";
+        }
 
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
-        usersRepository.save(user);
+        usersService.saveUser(user);
 
-        for (Categories categories : standardCategoriesInDb) {
-            categories.setUsers(user);
+        categoriesService.createStandardCategoriesInDb();
+        List<Categories> standardCategories = categoriesService.findLastSixCategories();
+        for (Categories standardCategory : standardCategories) {
+            standardCategory.setUsers(user);
         }
 
-        user.setCategoriesList(standardCategoriesInDb);
+        user.setCategoriesList(standardCategories);
         user.setCardsList(cardsService.generatedStandardCards(user.getId()));
+
 
         return "redirect:/login";
     }

@@ -1,5 +1,6 @@
 package com.web.wallet.controller;
 
+import com.web.wallet.entity.Cards;
 import com.web.wallet.entity.Journal;
 import com.web.wallet.entity.Users;
 import com.web.wallet.service.CardsService;
@@ -14,10 +15,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class JournalController {
@@ -48,8 +48,47 @@ public class JournalController {
         return "journal";
     }
 
+    @GetMapping("/journal/add")
+    public String addJournal(Model model) {
+        Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        Journal journal = new Journal(0L, LocalDate.now(), "", true);
+        System.out.println(journal);
+
+        model.addAttribute("journal", journal);
+        model.addAttribute("categories", user.getCategoriesList());
+        model.addAttribute("cards", user.getCardsList());
+
+        return "journal_add";
+    }
+
+    @PostMapping("/journal/add")
+    public String postAddJournal(@RequestParam Long amount, @RequestParam String purchase, @RequestParam String date,
+                                 @RequestParam Long chooseCategory, @RequestParam Long chooseCard, Model model) {
+        Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+        Optional<Cards> optionalCards = cardsService.findCardById(chooseCard);
+
+        if (!optionalCards.isPresent()) {
+            return "redirect:/journal";
+        }
+
+        Cards cards = optionalCards.get();
+
+        Journal journal = new Journal(amount, LocalDate.parse(date), purchase, categoriesService.findIncomeById(chooseCategory));
+        journal.setCategories(categoriesService.findCategoryById(chooseCategory).orElse(null));
+        journal.setCards(cards);
+        journal.setUsers(user);
+        journalService.saveJournal(journal);
+
+        Long balance = cards.getBalance() + (journal.getInOutMoney() ? journal.getAmount() : -journal.getAmount());
+        cards.setBalance(balance);
+        cardsService.saveCard(cards);
+
+        return "redirect:/journal";
+    }
+
     @GetMapping("/journal/edit/{id}")
-    public String editJournal(@PathVariable(value = "id") long id, Model model) {
+    public String editJournal(@PathVariable(value = "id") Long id, Model model) {
         Optional<Journal> optionalJournal = journalService.findJournalById(id);
 
         if (!optionalJournal.isPresent()) {
@@ -68,22 +107,21 @@ public class JournalController {
     }
 
     @PostMapping("/journal/edit/{id}")
-    public String updateJournal(@PathVariable(value = "id") long id, @RequestParam long amount, @RequestParam String purchase,
-                                 @RequestParam String date, @RequestParam String chooseCategory, @RequestParam String chooseCard, Model model) {
+    public String updateJournal(@PathVariable(value = "id") Long id, @RequestParam Long amount, @RequestParam String purchase,
+                                 @RequestParam String date, @RequestParam Long chooseCategory, @RequestParam Long chooseCard, Model model) {
         Optional<Journal> optionalJournal = journalService.findJournalById(id);
         if (!optionalJournal.isPresent()) {
             return "redirect:/journal";
         }
 
         Journal oldJournal = optionalJournal.get();
-        Journal newJournal = new Journal(amount, LocalDate.parse(date), purchase, categoriesService.findIncomeById(Long.parseLong(chooseCategory)));
-        newJournal.setCategories(categoriesService.findCategoryById(Long.parseLong(chooseCategory)));
-        newJournal.setCards(cardsService.findCardById(Long.parseLong(chooseCard)).orElse(null));
+        Journal newJournal = new Journal(amount, LocalDate.parse(date), purchase, categoriesService.findIncomeById(chooseCategory));
+        newJournal.setCategories(categoriesService.findCategoryById(chooseCategory).orElse(null));
+        newJournal.setCards(cardsService.findCardById(chooseCard).orElse(null));
         newJournal.setUsers(oldJournal.getUsers());
         newJournal.setId(oldJournal.getId());
 
         newJournal = cardsService.editCard(oldJournal, newJournal);
-
 
         journalService.saveJournal(newJournal);
 
@@ -91,7 +129,7 @@ public class JournalController {
     }
 
     @GetMapping("/journal/delete/{id}")
-    public String deleteJournal(@PathVariable(value = "id") long id, Model model) {
+    public String deleteJournal(@PathVariable(value = "id") Long id, Model model) {
         Optional<Journal> optionalJournal = journalService.findJournalById(id);
         if (!optionalJournal.isPresent()) {
             return "redirect:/journal";

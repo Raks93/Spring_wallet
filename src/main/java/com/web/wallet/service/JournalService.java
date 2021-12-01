@@ -30,4 +30,5 @@ public class JournalService {
     public void deleteJournalById(long id) {
         journalRepository.deleteById(id);
     }
+
 }

@@ -57,17 +57,6 @@ public class CardsService {
             }
         }
 
-//        for (String standardCardsName : standardCardsNames) {
-//              if (user.isPresent() && !user.get().getCardsList().isEmpty()) {
-//                Cards card = new Cards(standardCardsName, 0L);
-//                cardsList.add(card);
-//                card.setUsers(usersRepository.findById(userId).get());
-//                cardsRepository.save(card);
-//                System.out.println(card);
-//            }
-//            System.out.println(user.get().getCardsList());
-//        }
-
         return cardsList;
     }
 
@@ -95,6 +84,7 @@ public class CardsService {
             newJournal.getCards().setBalance(newJournal.getCards().getBalance() + newJournalAmount);
             cardsRepository.save(oldJournal.getCards());
         }
+
         cardsRepository.save(newJournal.getCards());
 
         return newJournal;
@@ -108,5 +98,9 @@ public class CardsService {
 
     public void deleteCardById(long id) {
         cardsRepository.deleteById(id);
+    }
+
+    public Cards findCardByName(String name) {
+        return cardsRepository.findByName(name);
     }
 }
