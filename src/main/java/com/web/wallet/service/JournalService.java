@@ -31,4 +31,7 @@ public class JournalService {
         journalRepository.deleteById(id);
     }
 
+    public void deleteAllRecords() {
+        journalRepository.deleteAll();
+    }
 }

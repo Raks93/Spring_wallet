@@ -1,54 +1,50 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <title th:text="'Категории'"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Статьи бюджета</title>
-    <style>
-      table th, table td {padding: 5px;}
-      .row  {
-         font-style: italic;
-      }
-      .even-row {
-         color: black;
-      }
-      .odd-row {
-         color: black;
-      }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 </head>
 <body>
 <header align="right"   th:insert="blocks/header :: header"></header>
-<h1 align="center">Статьи бюджета</h1>
-<h4 align="center" th:text="${message}"></h4>
-<div class="container mt-5 mb-5">
-    <form align="center" action="/categories/add">
-        <button type="submit"  class="btn btn-success">Добавить категорию</button>
-    </form>
-</div>
-<table border="1" class="table" align="center">
-    <tr>
-        <th>Название</th>
-        <th>Категория</th>
-        <th>Редактировать</th>
-        <th>Удалить</th>
-    </tr>
-    <tr th:each="el, state : ${categories}"
-        class="row" th:classappend="${state.odd} ? 'odd-row' : 'even-row'">
-        <td th:utext="${el.name}">Название</td>
-        <div th:if="${el.income}">
-            <td th:utext="Доход">Категория</td>
-        </div>
-        <div th:unless="${el.income}">
-            <td th:utext="Расход">Категория</td>
-        </div>
-        <td>
-            <a th:href="'/categories/edit/' + ${el.id}">Редактировать</a>
-        </td>
-        <td>
-            <a th:href="'/categories/delete/' + ${el.id} + '/' + ${state.size}">Удалить</a>
-        </td>
-    </tr>
-</table>
+<main>
+    <h2 class="display-6 text-center mb-4">Статьи бюджета</h2>
+    <h4 align="center" th:text="${message}"></h4>
+    <div class="container mt-5 mb-5">
+        <form align="center" action="/categories/add">
+            <button type="submit"  class="btn btn-success">Добавить категорию</button>
+        </form>
+    </div>
 
+    <div class="table-responsive">
+        <table class="table text-center">
+            <thead>
+            <tr>
+                <th style="width: 25%;">Название</th>
+                <th style="width: 25%;">Категория</th>
+                <th style="width: 25%;">Редактировать</th>
+                <th style="width: 25%;">Удалить</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="el, state : ${categories}">
+                <td th:utext="${el.name}"><svg class="bi" width="24" height="24"><use xlink:href="#check"></use></svg></td>
+                <div th:if="${el.income}">
+                    <td th:utext="Доход"><svg class="bi" width="24" height="24"><use xlink:href="#check"></use></svg></td>
+                </div>
+                <div th:unless="${el.income}">
+                    <td th:utext="Расход"><svg class="bi" width="24" height="24"><use xlink:href="#check"></use></svg></td>
+                </div>
+                <td>
+                    <a th:href="'/categories/edit/' + ${el.id}">Редактировать</a>
+                </td>
+                <td>
+                    <a th:href="'/categories/delete/' + ${el.id} + '/' + ${state.size}">Удалить</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
 </body>
 </html>

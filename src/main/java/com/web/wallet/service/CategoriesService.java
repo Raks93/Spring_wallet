@@ -55,4 +55,8 @@ public class CategoriesService {
     public void deleteCategoryById(long id) {
         categoriesRepository.deleteById(id);
     }
+
+    public void deleteAllRecords() {
+        categoriesRepository.deleteAll();
+    }
 }

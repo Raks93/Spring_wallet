@@ -49,4 +49,7 @@ public class UsersService {
         return byId.get();
     }
 
+    public void deleteAllRecords() {
+        usersRepository.deleteAll();
+    }
 }

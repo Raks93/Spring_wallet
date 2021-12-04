@@ -103,4 +103,8 @@ public class CardsService {
     public Cards findCardByName(String name) {
         return cardsRepository.findByName(name);
     }
+
+    public void deleteAllRecords() {
+        cardsRepository.deleteAll();
+    }
 }
