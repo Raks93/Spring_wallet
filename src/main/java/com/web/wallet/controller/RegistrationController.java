@@ -3,8 +3,6 @@ package com.web.wallet.controller;
 import com.web.wallet.entity.Categories;
 import com.web.wallet.entity.Role;
 import com.web.wallet.entity.Users;
-import com.web.wallet.repository.CategoriesRepository;
-import com.web.wallet.repository.UsersRepository;
 import com.web.wallet.service.CardsService;
 import com.web.wallet.service.CategoriesService;
 import com.web.wallet.service.UsersService;
