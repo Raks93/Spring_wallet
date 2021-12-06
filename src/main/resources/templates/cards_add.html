@@ -14,7 +14,7 @@
     <div th:each="el : ${cards}">
         <form method="post">
             <input required type="text" th:value="${el.name}" maxlength="250" name="name" placeholder="Введите название" class="form-control"><br>
-            <input required type="number" th:value="${el.balance}" name="balance" step="1" placeholder="Введите сумму" class="form-control"><br>
+            <input required type="number" th:value="${el.balance}" name="balance" max="10000000" step="1" placeholder="Введите сумму" class="form-control"><br>
             <button type="submit" class="btn btn-success">Добавить</button>
         </form>
     </div>
