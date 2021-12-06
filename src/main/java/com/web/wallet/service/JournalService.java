@@ -64,9 +64,6 @@ public class JournalService {
         List<Cards> cardsList = user.getCardsList();
         List<Journal> journalList = user.getJournalList();
 
-        System.out.println("Пустая строка" + wb.getSheetAt(0).getRow(0).getCell(5).getRichStringCellValue().getString().trim().equals(""));
-        System.out.println("Тип булен" + (wb.getSheetAt(0).getRow(1).getCell(5).getCellType() == BOOLEAN));
-
         for (Row row : wb.getSheetAt(0)) {
             if ((row.getCell(0) != null) && (row.getCell(3) != null) && (row.getCell(4) != null) &&
                     (row.getCell(0).getCellType() == NUMERIC) && (!DateUtil.isCellDateFormatted(row.getCell(0))) &&
