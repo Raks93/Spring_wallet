@@ -62,7 +62,6 @@ public class JournalService {
         Users user = usersRepository.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         List<Categories> categoriesList = user.getCategoriesList();
         List<Cards> cardsList = user.getCardsList();
-        List<Journal> journalList = user.getJournalList();
 
         for (Row row : wb.getSheetAt(0)) {
             if ((row.getCell(0) != null) && (row.getCell(3) != null) && (row.getCell(4) != null) &&
