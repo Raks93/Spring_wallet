@@ -13,7 +13,7 @@
     <div th:each="el : ${journal}">
         <form method="post">
             <input type="number" th:value="${el.amount}" name="amount" min="1" step="1" placeholder="Введите сумму" class="form-control"><br>
-            <input required type="text" th:value="${el.purchase}" name="purchase" placeholder="Введите название" class="form-control"><br>
+            <input required type="text" th:value="${el.purchase}" maxlength="250" name="purchase" placeholder="Введите название" class="form-control"><br>
             <input type="date" th:value="${el.date}" max="2100-01-01" min="2000-01-01"  name="date" placeholder="Введите дату" class="form-control"><br>
             <select name="chooseCategory" placeholder="Выберите категорию" class="form-control">
                 <option th:each="category : ${categories}"
