@@ -9,9 +9,14 @@
 <header align="right" th:insert="blocks/header :: header"></header>
 <main>
     <h2 class="display-6 text-center mb-4">Журнал</h2>
-    <div class="container mt-5 mb-5">
+    <h4 align="center" th:text="${message}" ></h4>
+    <div class="container mt-1 mb-1">
         <form align="center" action="/journal/add">
-            <button type="submit"  class="btn btn-success">Добавить запись</button>
+            <button type="submit"  class="btn btn-success mt-1 mb-1">Добавить запись</button>
+        </form>
+        <form align="center" action="/journal" enctype="multipart/form-data" method="post">
+            <p><input type="file" name="file" accept=".xls, .xlsx" class="btn btn-success">
+                <input type="submit" value="Загрузить" class="btn btn-success"></p>
         </form>
     </div>
 

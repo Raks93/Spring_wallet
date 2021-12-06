@@ -39,7 +39,6 @@ public class Categories {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", income=" + income +
-                ", usersList=" + users +
                 '}';
     }
 }

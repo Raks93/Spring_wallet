@@ -60,10 +60,6 @@ public class CardsService {
         return cardsList;
     }
 
-    public List<Cards> findAllCards() {
-        return cardsRepository.findAll();
-    }
-
     public void saveCard(Cards cards) {
         cardsRepository.save(cards);
     }
@@ -100,9 +96,6 @@ public class CardsService {
         cardsRepository.deleteById(id);
     }
 
-    public Cards findCardByName(String name) {
-        return cardsRepository.findByName(name);
-    }
 
     public void deleteAllRecords() {
         cardsRepository.deleteAll();

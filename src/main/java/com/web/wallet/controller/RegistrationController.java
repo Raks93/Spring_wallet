@@ -45,7 +45,6 @@ public class RegistrationController {
             return "registration";
         }
 
-        System.out.println(user);
         Users userFromDb = usersService.findUserByName(user.getUsername());
 
         if (userFromDb != null) {

@@ -7,6 +7,8 @@ import com.web.wallet.service.CardsService;
 import com.web.wallet.service.CategoriesService;
 import com.web.wallet.service.JournalService;
 import com.web.wallet.service.UsersService;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -48,12 +52,38 @@ public class JournalController {
         return "journal";
     }
 
+    @PostMapping("/journal")
+    public String loadJournal(@RequestParam MultipartFile file, Model model) throws IOException {
+
+        InputStream inputStream =  new BufferedInputStream(file.getInputStream());
+        StringBuilder stringBuilder = new StringBuilder(file.getOriginalFilename());
+        stringBuilder.delete(0, stringBuilder.lastIndexOf(".") + 1);
+        if (stringBuilder.toString().equals("xls")) {
+            journalService.readFile(new HSSFWorkbook(inputStream));
+
+        }
+        else if (stringBuilder.toString().equals("xlsx")) {
+            journalService.readFile(new XSSFWorkbook(inputStream));
+        }
+        else {
+            Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
+            user.getJournalList().sort(Collections.reverseOrder(Comparator.comparing(j -> j.getDate().toString())));
+            model.addAttribute("journal", user.getJournalList());
+            model.addAttribute("message", "Ошибка выбора файла");
+            return "journal";
+        }
+
+        inputStream.close();
+
+
+        return "redirect:/journal";
+    }
+
     @GetMapping("/journal/add")
     public String addJournal(Model model) {
         Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
 
         Journal journal = new Journal(0L, LocalDate.now(), "", true);
-        System.out.println(journal);
 
         model.addAttribute("journal", journal);
         model.addAttribute("categories", user.getCategoriesList());
@@ -61,6 +91,8 @@ public class JournalController {
 
         return "journal_add";
     }
+
+
 
     @PostMapping("/journal/add")
     public String postAddJournal(@RequestParam Long amount, @RequestParam String purchase, @RequestParam String date,
@@ -108,7 +140,7 @@ public class JournalController {
 
     @PostMapping("/journal/edit/{id}")
     public String updateJournal(@PathVariable(value = "id") Long id, @RequestParam Long amount, @RequestParam String purchase,
-                                 @RequestParam String date, @RequestParam Long chooseCategory, @RequestParam Long chooseCard, Model model) {
+                                @RequestParam String date, @RequestParam Long chooseCategory, @RequestParam Long chooseCard, Model model) {
         Optional<Journal> optionalJournal = journalService.findJournalById(id);
         if (!optionalJournal.isPresent()) {
             return "redirect:/journal";

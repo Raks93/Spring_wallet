@@ -128,8 +128,6 @@ public class CardsController {
 
         Users user = usersService.findUserByName(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        System.out.println(user);
-
         model.addAttribute("fromCategory", id);
         model.addAttribute("cards", user.getCardsList());
 
